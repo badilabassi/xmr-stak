@@ -1,4 +1,4 @@
- /*
+/*
   * This program is free software: you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation, either version 3 of the License, or
@@ -34,7 +34,7 @@
 #include "xmrstak/misc/utility.hpp"
 
 #ifndef CONF_NO_HTTPD
-#	include "xmrstak/http/httpd.hpp"
+#include "xmrstak/http/httpd.hpp"
 #endif
 
 #include <stdlib.h>
@@ -50,9 +50,9 @@
 #endif
 
 #ifdef _WIN32
-#	define strcasecmp _stricmp
-#	include <windows.h>
-#	include "xmrstak/misc/uac.hpp"
+#define strcasecmp _stricmp
+#include <windows.h>
+#include "xmrstak/misc/uac.hpp"
 #endif // _WIN32
 
 int do_benchmark(int block_version, int wait_sec, int work_sec);
@@ -62,62 +62,64 @@ void help()
 	using namespace std;
 	using namespace xmrstak;
 
-	cout<<"Usage: "<<params::inst().binaryName<<" [OPTION]..."<<endl;
-	cout<<" "<<endl;
-	cout<<"  -h, --help                 show this help"<<endl;
-	cout<<"  -v, --version              show version number"<<endl;
-	cout<<"  -V, --version-long         show long version number"<<endl;
-	cout<<"  -c, --config FILE          common miner configuration file"<<endl;
-	cout<<"  -C, --poolconf FILE        pool configuration file"<<endl;
+	cout << "Usage: " << params::inst().binaryName << " [OPTION]..." << endl;
+	cout << " " << endl;
+	cout << "  -h, --help                 show this help" << endl;
+	cout << "  -v, --version              show version number" << endl;
+	cout << "  -V, --version-long         show long version number" << endl;
+	cout << "  -c, --config FILE          common miner configuration file" << endl;
+	cout << "  -C, --poolconf FILE        pool configuration file" << endl;
 #ifdef _WIN32
-	cout<<"  --noUAC                    disable the UAC dialog"<<endl;
+	cout << "  --noUAC                    disable the UAC dialog" << endl;
 #endif
 	cout<<"  --benchmark BLOCKVERSION   ONLY do a benchmark and exit"<<endl;
 	cout<<"  --benchwait WAIT_SEC             ... benchmark wait time"<<endl;
 	cout<<"  --benchwork WORK_SEC             ... benchmark work time"<<endl;
 #ifndef CONF_NO_CPU
-	cout<<"  --noCPU                    disable the CPU miner backend"<<endl;
-	cout<<"  --cpu FILE                 CPU backend miner config file"<<endl;
+	cout << "  --noCPU                    disable the CPU miner backend" << endl;
+	cout << "  --cpu FILE                 CPU backend miner config file" << endl;
 #endif
 #ifndef CONF_NO_OPENCL
-	cout<<"  --noAMD                    disable the AMD miner backend"<<endl;
-	cout<<"  --noAMDCache               disable the AMD(OpenCL) cache for precompiled binaries"<<endl;
-	cout<<"  --openCLVendor VENDOR      use OpenCL driver of VENDOR and devices [AMD,NVIDIA]"<<endl;
-	cout<<"                             default: AMD"<<endl;
-	cout<<"  --amd FILE                 AMD backend miner config file"<<endl;
+	cout << "  --noAMD                    disable the AMD miner backend" << endl;
+	cout << "  --noAMDCache               disable the AMD(OpenCL) cache for precompiled binaries" << endl;
+	cout << "  --openCLVendor VENDOR      use OpenCL driver of VENDOR and devices [AMD,NVIDIA]" << endl;
+	cout << "                             default: AMD" << endl;
+	cout << "  --amd FILE                 AMD backend miner config file" << endl;
 #endif
 #ifndef CONF_NO_CUDA
-	cout<<"  --noNVIDIA                 disable the NVIDIA miner backend"<<endl;
-	cout<<"  --nvidia FILE              NVIDIA backend miner config file"<<endl;
+	cout << "  --noNVIDIA                 disable the NVIDIA miner backend" << endl;
+	cout << "  --nvidia FILE              NVIDIA backend miner config file" << endl;
 #endif
 #ifndef CONF_NO_HTTPD
-	cout<<"  -i --httpd HTTP_PORT       HTTP interface port"<<endl;
+	cout << "  -i --httpd HTTP_PORT       HTTP interface port" << endl;
 #endif
-	cout<<" "<<endl;
-	cout<<"The following options can be used for automatic start without a guided config,"<<endl;
-	cout<<"If config exists then this pool will be top priority."<<endl;
-	cout<<"  -o, --url URL              pool url and port, e.g. pool.usxmrpool.com:3333"<<endl;
-	cout<<"  -O, --tls-url URL          TLS pool url and port, e.g. pool.usxmrpool.com:10443"<<endl;
-	cout<<"  -u, --user USERNAME        pool user name or wallet address"<<endl;
-	cout<<"  -r, --rigid RIGID          rig identifier for pool-side statistics (needs pool support)"<<endl;
-	cout<<"  -p, --pass PASSWD          pool password, in the most cases x or empty \"\""<<endl;
-	cout<<"  --use-nicehash             the pool should run in nicehash mode"<<endl;
-	cout<<"  --currency NAME            currency to mine"<<endl;
-	cout<< endl;
+	cout << " " << endl;
+	cout << "The following options can be used for automatic start without a guided config," << endl;
+	cout << "If config exists then this pool will be top priority." << endl;
+	cout << "  -o, --url URL              pool url and port, e.g. pool.usxmrpool.com:3333" << endl;
+	cout << "  -O, --tls-url URL          TLS pool url and port, e.g. pool.usxmrpool.com:10443" << endl;
+	cout << "  -u, --user USERNAME        pool user name or wallet address" << endl;
+	cout << "  -r, --rigid RIGID          rig identifier for pool-side statistics (needs pool support)" << endl;
+	cout << "  -p, --pass PASSWD          pool password, in the most cases x or empty \"\"" << endl;
+	cout << "  --use-nicehash             the pool should run in nicehash mode" << endl;
+	cout << "  --currency NAME            currency to mine" << endl;
+	cout << endl;
 #ifdef _WIN32
-	cout<<"Environment variables:\n"<<endl;
-	cout<<"  XMRSTAK_NOWAIT             disable the dialog `Press any key to exit."<<std::endl;
-	cout<<"                	            for non UAC execution"<<endl;
-	cout<< endl;
+	cout << "Environment variables:\n"
+			 << endl;
+	cout << "  XMRSTAK_NOWAIT             disable the dialog `Press any key to exit." << std::endl;
+	cout << "                	            for non UAC execution" << endl;
+	cout << endl;
 #endif
 	std::string algos;
 	jconf::GetAlgoList(algos);
-	cout<< "Supported coin options: " << endl << algos << endl;
-	cout<< "Version: " << get_version_str_short() << endl;
-	cout<<"Brought to by fireice_uk and psychocrypt under GPLv3."<<endl;
+	cout << "Supported coin options: " << endl
+			 << algos << endl;
+	cout << "Version: " << get_version_str_short() << endl;
+	cout << "Brought to by fireice_uk and psychocrypt under GPLv3." << endl;
 }
 
-bool read_yes_no(const char* str)
+bool read_yes_no(const char *str)
 {
 	std::string tmp;
 	do
@@ -125,36 +127,38 @@ bool read_yes_no(const char* str)
 		std::cout << str << std::endl;
 		std::cin >> tmp;
 		std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
-	}
-	while(tmp != "y" && tmp != "n" && tmp != "yes" && tmp != "no");
+	} while (tmp != "y" && tmp != "n" && tmp != "yes" && tmp != "no");
 
 	return tmp == "y" || tmp == "yes";
 }
 
-inline const char* bool_to_str(bool v)
+inline const char *bool_to_str(bool v)
 {
 	return v ? "true" : "false";
 }
 
-std::string get_multipool_entry(bool& final)
+std::string get_multipool_entry(bool &final)
 {
-	std::cout<<std::endl<<"- Next Pool:"<<std::endl<<std::endl;
+	std::cout << std::endl
+						<< "- Next Pool:" << std::endl
+						<< std::endl;
 
 	std::string pool;
-	std::cout<<"- Pool address: e.g. " << jconf::GetDefaultPool(xmrstak::params::inst().currency.c_str()) << std::endl;
+	std::cout << "- Pool address: e.g. " << jconf::GetDefaultPool(xmrstak::params::inst().currency.c_str()) << std::endl;
 	std::cin >> pool;
 
 	std::string userName;
-	std::cout<<"- Username (wallet address or pool login):"<<std::endl;
+	std::cout << "- Username (wallet address or pool login):" << std::endl;
 	std::cin >> userName;
 
 	std::string passwd;
-	std::cin.clear(); std::cin.ignore(INT_MAX,'\n');
-	std::cout<<"- Password (mostly empty or x):"<<std::endl;
+	std::cin.clear();
+	std::cin.ignore(INT_MAX, '\n');
+	std::cout << "- Password (mostly empty or x):" << std::endl;
 	getline(std::cin, passwd);
 
 	std::string rigid;
-	std::cout<<"- Rig identifier for pool-side statistics (needs pool support). Can be empty:"<<std::endl;
+	std::cout << "- Rig identifier for pool-side statistics (needs pool support). Can be empty:" << std::endl;
 	getline(std::cin, rigid);
 
 #ifdef CONF_NO_TLS
@@ -165,8 +169,8 @@ std::string get_multipool_entry(bool& final)
 	bool nicehash = read_yes_no("- Do you want to use nicehash on this pool? (y/n)");
 
 	int64_t pool_weight;
-	std::cout << "- Please enter a weight for this pool: "<<std::endl;
-	while(!(std::cin >> pool_weight) || pool_weight <= 0)
+	std::cout << "- Please enter a weight for this pool: " << std::endl;
+	while (!(std::cin >> pool_weight) || pool_weight <= 0)
 	{
 		std::cin.clear();
 		std::cin.ignore(INT_MAX, '\n');
@@ -175,16 +179,16 @@ std::string get_multipool_entry(bool& final)
 
 	final = !read_yes_no("- Do you want to add another pool? (y/n)");
 
-	return "\t{\"pool_address\" : \"" + pool +"\", \"wallet_address\" : \"" + userName + "\", \"rig_id\" : \"" + rigid +
-		"\", \"pool_password\" : \"" + passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " +
-		bool_to_str(tls) + ", \"tls_fingerprint\" : \"\", \"pool_weight\" : " + std::to_string(pool_weight) + " },\n";
+	return "\t{\"pool_address\" : \"" + pool + "\", \"wallet_address\" : \"" + userName + "\", \"rig_id\" : \"" + rigid +
+				 "\", \"pool_password\" : \"" + passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " +
+				 bool_to_str(tls) + ", \"tls_fingerprint\" : \"\", \"pool_weight\" : " + std::to_string(pool_weight) + " },\n";
 }
 
-inline void prompt_once(bool& prompted)
+inline void prompt_once(bool &prompted)
 {
-	if(!prompted)
+	if (!prompted)
 	{
-		std::cout<<"Please enter:"<<std::endl;
+		std::cout << "Please enter:" << std::endl;
 		prompted = true;
 	}
 }
@@ -195,76 +199,78 @@ void do_guided_pool_config()
 
 	// load the template of the backend config into a char variable
 	const char *tpl =
-		#include "../pools.tpl"
-	;
+#include "../pools.tpl"
+			;
 
 	configEditor configTpl{};
 	configTpl.set(std::string(tpl));
 	bool prompted = false;
 
-	auto& currency = params::inst().currency;
-	if(currency.empty() || !jconf::IsOnAlgoList(currency))
+	auto &currency = params::inst().currency;
+	if (currency.empty() || !jconf::IsOnAlgoList(currency))
 	{
 		prompt_once(prompted);
 
 		std::string tmp;
-		while(tmp.empty() || !jconf::IsOnAlgoList(tmp))
+		while (tmp.empty() || !jconf::IsOnAlgoList(tmp))
 		{
 			std::string list;
 			jconf::GetAlgoList(list);
-			std::cout << "- Please enter the currency that you want to mine: "<<std::endl;
+			std::cout << "- Please enter the currency that you want to mine: " << std::endl;
 			std::cout << list << std::endl;
 			std::cin >> tmp;
 		}
 		currency = tmp;
 	}
 
-	auto& pool = params::inst().poolURL;
+	auto &pool = params::inst().poolURL;
 	bool userSetPool = true;
-	if(pool.empty())
+	if (pool.empty())
 	{
 		prompt_once(prompted);
 
 		userSetPool = false;
-		std::cout<<"- Pool address: e.g. " << jconf::GetDefaultPool(xmrstak::params::inst().currency.c_str()) << std::endl;
+		std::cout << "- Pool address: e.g. " << jconf::GetDefaultPool(xmrstak::params::inst().currency.c_str()) << std::endl;
 		std::cin >> pool;
 	}
 
-	auto& userName = params::inst().poolUsername;
-	if(userName.empty())
+	auto &userName = params::inst().poolUsername;
+	if (userName.empty())
 	{
 		prompt_once(prompted);
 
-		std::cout<<"- Username (wallet address or pool login):"<<std::endl;
+		std::cout << "- Username (wallet address or pool login):" << std::endl;
 		std::cin >> userName;
 	}
 
 	bool stdin_flushed = false;
-	auto& passwd = params::inst().poolPasswd;
-	if(passwd.empty() && !params::inst().userSetPwd)
+	auto &passwd = params::inst().poolPasswd;
+	if (passwd.empty() && !params::inst().userSetPwd)
 	{
 		prompt_once(prompted);
 
 		// clear everything from stdin to allow an empty password
-		std::cin.clear(); std::cin.ignore(INT_MAX,'\n');
+		std::cin.clear();
+		std::cin.ignore(INT_MAX, '\n');
 		stdin_flushed = true;
 
-		std::cout<<"- Password (mostly empty or x):"<<std::endl;
+		std::cout << "- Password (mostly empty or x):" << std::endl;
 		getline(std::cin, passwd);
 	}
 
-	auto& rigid = params::inst().poolRigid;
-	if(rigid.empty() && !params::inst().userSetRigid)
+	auto &rigid = params::inst().poolRigid;
+	if (rigid.empty() && !params::inst().userSetRigid)
 	{
 		prompt_once(prompted);
 
-		if(!stdin_flushed)
+		if (!stdin_flushed)
 		{
 			// clear everything from stdin to allow an empty rigid
-			std::cin.clear(); std::cin.ignore(INT_MAX,'\n');
+			std::cin.clear();
+			std::cin.ignore(INT_MAX, '\n');
 		}
 
-		std::cout<<"- Rig identifier for pool-side statistics (needs pool support). Can be empty:"<<std::endl;
+		std::cout << "- Rig identifier for pool-side statistics (needs pool support). Can be empty:" << std::endl;
 		getline(std::cin, rigid);
 	}
 
@@ -272,7 +278,7 @@ void do_guided_pool_config()
 #ifdef CONF_NO_TLS
 	tls = false;
 #else
-	if(!userSetPool)
+	if (!userSetPool)
 	{
 		prompt_once(prompted);
 		tls = read_yes_no("- Does this pool port support TLS/SSL? Use no if unknown. (y/N)");
@@ -282,7 +288,7 @@ void do_guided_pool_config()
 #endif
 
 	bool nicehash;
-	if(!userSetPool)
+	if (!userSetPool)
 	{
 		prompt_once(prompted);
 		nicehash = read_yes_no("- Do you want to use nicehash on this pool? (y/n)");
@@ -291,20 +297,20 @@ void do_guided_pool_config()
 		nicehash = params::inst().nicehashMode;
 
 	bool multipool;
-	if(!userSetPool)
+	if (!userSetPool)
 		multipool = read_yes_no("- Do you want to use multiple pools? (y/n)");
 	else
 		multipool = false;
 
 	int64_t pool_weight;
-	if(multipool)
+	if (multipool)
 	{
 		std::cout << "Pool weight is a number telling the miner how important the pool is." << std::endl;
 		std::cout << "Miner will mine mostly at the pool with the highest weight, unless the pool fails." << std::endl;
 		std::cout << "Weight must be an integer larger than 0." << std::endl;
-		std::cout << "- Please enter a weight for this pool: "<<std::endl;
+		std::cout << "- Please enter a weight for this pool: " << std::endl;
 
-		while(!(std::cin >> pool_weight) || pool_weight <= 0)
+		while (!(std::cin >> pool_weight) || pool_weight <= 0)
 		{
 			std::cin.clear();
 			std::cin.ignore(INT_MAX, '\n');
@@ -315,24 +321,23 @@ void do_guided_pool_config()
 		pool_weight = 1;
 
 	std::string pool_table;
-	pool_table += "\t{\"pool_address\" : \"" + pool +"\", \"wallet_address\" : \"" + userName +  "\", \"rig_id\" : \"" + rigid +
-		"\", \"pool_password\" : \"" +  passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " +
-		bool_to_str(tls) + ", \"tls_fingerprint\" : \"\", \"pool_weight\" : " + std::to_string(pool_weight) + " },\n";
+	pool_table += "\t{\"pool_address\" : \"" + pool + "\", \"wallet_address\" : \"" + userName + "\", \"rig_id\" : \"" + rigid +
+								"\", \"pool_password\" : \"" + passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " +
+								bool_to_str(tls) + ", \"tls_fingerprint\" : \"\", \"pool_weight\" : " + std::to_string(pool_weight) + " },\n";
 
-	if(multipool)
+	if (multipool)
 	{
 		bool final;
 		do
 		{
 			pool_table += get_multipool_entry(final);
-		}
-		while(!final);
+		} while (!final);
 	}
 
 	configTpl.replace("CURRENCY", currency);
 	configTpl.replace("POOLCONF", pool_table);
 	configTpl.write(params::inst().configFilePools);
-	std::cout<<"Pool configuration stored in file '"<<params::inst().configFilePools<<"'"<<std::endl;
+	std::cout << "Pool configuration stored in file '" << params::inst().configFilePools << "'" << std::endl;
 }
 
 void do_guided_config()
@@ -341,27 +346,27 @@ void do_guided_config()
 
 	// load the template of the backend config into a char variable
 	const char *tpl =
-		#include "../config.tpl"
-	;
+#include "../config.tpl"
+			;
 
 	configEditor configTpl{};
 	configTpl.set(std::string(tpl));
 	bool prompted = false;
 
-	auto& http_port = params::inst().httpd_port;
-	if(http_port == params::httpd_port_unset)
+	auto &http_port = params::inst().httpd_port;
+	if (http_port == params::httpd_port_unset)
 	{
 #if defined(CONF_NO_HTTPD)
 		http_port = params::httpd_port_disabled;
 #else
 		prompt_once(prompted);
 
-		std::cout<<"- Do you want to use the HTTP interface?" <<std::endl;
-		std::cout<<"Unlike the screen display, browser interface is not affected by the GPU lag." <<std::endl;
-		std::cout<<"If you don't want to use it, please enter 0, otherwise enter port number that the miner should listen on" <<std::endl;
+		std::cout << "- Do you want to use the HTTP interface?" << std::endl;
+		std::cout << "Unlike the screen display, browser interface is not affected by the GPU lag." << std::endl;
+		std::cout << "If you don't want to use it, please enter 0, otherwise enter port number that the miner should listen on" << std::endl;
 
 		int32_t port;
-		while(!(std::cin >> port) || port < 0 || port > 65535)
+		while (!(std::cin >> port) || port < 0 || port > 65535)
 		{
 			std::cin.clear();
 			std::cin.ignore(INT_MAX, '\n');
@@ -374,7 +379,7 @@ void do_guided_config()
 
 	configTpl.replace("HTTP_PORT", std::to_string(http_port));
 	configTpl.write(params::inst().configFile);
-	std::cout<<"Configuration stored in file '"<<params::inst().configFile<<"'"<<std::endl;
+	std::cout << "Configuration stored in file '" << params::inst().configFile << "'" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -396,14 +401,14 @@ int main(int argc, char *argv[])
 	std::string separator("/");
 	auto pos = pathWithName.rfind(separator);
 
-	if(pos == std::string::npos)
+	if (pos == std::string::npos)
 	{
 		// try windows "\"
 		separator = "\\";
 		pos = pathWithName.rfind(separator);
 	}
 	params::inst().binaryName = std::string(pathWithName, pos + 1, std::string::npos);
-	if(params::inst().binaryName.compare(pathWithName) != 0)
+	if (params::inst().binaryName.compare(pathWithName) != 0)
 	{
 		params::inst().executablePrefix = std::string(pathWithName, 0, pos);
 		params::inst().executablePrefix += separator;
@@ -411,53 +416,53 @@ int main(int argc, char *argv[])
 
 	params::inst().minerArg0 = argv[0];
 	params::inst().minerArgs.reserve(argc * 16);
-	for(int i = 1; i < argc; i++)
+	for (int i = 1; i < argc; i++)
 	{
 		params::inst().minerArgs += " ";
 		params::inst().minerArgs += argv[i];
 	}
 
 	bool pool_url_set = false;
-	for(size_t i = 1; i < argc-1; i++)
+	for (size_t i = 1; i < argc - 1; i++)
 	{
 		std::string opName(argv[i]);
-		if(opName == "-o" || opName == "-O" || opName == "--url" || opName == "--tls-url")
+		if (opName == "-o" || opName == "-O" || opName == "--url" || opName == "--tls-url")
 			pool_url_set = true;
 	}
 
-	for(size_t i = 1; i < argc; ++i)
+	for (size_t i = 1; i < argc; ++i)
 	{
 		std::string opName(argv[i]);
-		if(opName.compare("-h") == 0 || opName.compare("--help") == 0)
+		if (opName.compare("-h") == 0 || opName.compare("--help") == 0)
 		{
 			help();
 			win_exit(0);
 			return 0;
 		}
-		if(opName.compare("-v") == 0 || opName.compare("--version") == 0)
+		if (opName.compare("-v") == 0 || opName.compare("--version") == 0)
 		{
-			std::cout<< "Version: " << get_version_str_short() << std::endl;
+			std::cout << "Version: " << get_version_str_short() << std::endl;
 			win_exit();
 			return 0;
 		}
-		else if(opName.compare("-V") == 0 || opName.compare("--version-long") == 0)
+		else if (opName.compare("-V") == 0 || opName.compare("--version-long") == 0)
 		{
-			std::cout<< "Version: " << get_version_str() << std::endl;
+			std::cout << "Version: " << get_version_str() << std::endl;
 			win_exit();
 			return 0;
 		}
-		else if(opName.compare("--noCPU") == 0)
+		else if (opName.compare("--noCPU") == 0)
 		{
 			params::inst().useCPU = false;
 		}
-		else if(opName.compare("--noAMD") == 0)
+		else if (opName.compare("--noAMD") == 0)
 		{
 			params::inst().useAMD = false;
 		}
-		else if(opName.compare("--openCLVendor") == 0)
+		else if (opName.compare("--openCLVendor") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '--openCLVendor' given");
 				win_exit();
@@ -465,25 +470,25 @@ int main(int argc, char *argv[])
 			}
 			std::string vendor(argv[i]);
 			params::inst().openCLVendor = vendor;
-			if(vendor != "AMD" && vendor != "NVIDIA")
+			if (vendor != "AMD" && vendor != "NVIDIA")
 			{
 				printer::inst()->print_msg(L0, "'--openCLVendor' must be 'AMD' or 'NVIDIA'");
 				win_exit();
 				return 1;
 			}
 		}
-		else if(opName.compare("--noAMDCache") == 0)
+		else if (opName.compare("--noAMDCache") == 0)
 		{
 			params::inst().AMDCache = false;
 		}
-		else if(opName.compare("--noNVIDIA") == 0)
+		else if (opName.compare("--noNVIDIA") == 0)
 		{
 			params::inst().useNVIDIA = false;
 		}
-		else if(opName.compare("--cpu") == 0)
+		else if (opName.compare("--cpu") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '--cpu' given");
 				win_exit();
@@ -491,10 +496,10 @@ int main(int argc, char *argv[])
 			}
 			params::inst().configFileCPU = argv[i];
 		}
-		else if(opName.compare("--amd") == 0)
+		else if (opName.compare("--amd") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '--amd' given");
 				win_exit();
@@ -502,10 +507,10 @@ int main(int argc, char *argv[])
 			}
 			params::inst().configFileAMD = argv[i];
 		}
-		else if(opName.compare("--nvidia") == 0)
+		else if (opName.compare("--nvidia") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '--nvidia' given");
 				win_exit();
@@ -513,10 +518,10 @@ int main(int argc, char *argv[])
 			}
 			params::inst().configFileNVIDIA = argv[i];
 		}
-		else if(opName.compare("--currency") == 0)
+		else if (opName.compare("--currency") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '--currency' given");
 				win_exit();
@@ -524,10 +529,10 @@ int main(int argc, char *argv[])
 			}
 			params::inst().currency = argv[i];
 		}
-		else if(opName.compare("-o") == 0 || opName.compare("--url") == 0)
+		else if (opName.compare("-o") == 0 || opName.compare("--url") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-o/--url' given");
 				win_exit();
@@ -536,10 +541,10 @@ int main(int argc, char *argv[])
 			params::inst().poolURL = argv[i];
 			params::inst().poolUseTls = false;
 		}
-		else if(opName.compare("-O") == 0 || opName.compare("--tls-url") == 0)
+		else if (opName.compare("-O") == 0 || opName.compare("--tls-url") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-O/--tls-url' given");
 				win_exit();
@@ -548,9 +553,9 @@ int main(int argc, char *argv[])
 			params::inst().poolURL = argv[i];
 			params::inst().poolUseTls = true;
 		}
-		else if(opName.compare("-u") == 0 || opName.compare("--user") == 0)
+		else if (opName.compare("-u") == 0 || opName.compare("--user") == 0)
 		{
-			if(!pool_url_set)
+			if (!pool_url_set)
 			{
 				printer::inst()->print_msg(L0, "Pool address has to be set if you want to specify username and password.");
 				win_exit();
@@ -558,7 +563,7 @@ int main(int argc, char *argv[])
 			}
 
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-u/--user' given");
 				win_exit();
@@ -566,9 +571,9 @@ int main(int argc, char *argv[])
 			}
 			params::inst().poolUsername = argv[i];
 		}
-		else if(opName.compare("-p") == 0 || opName.compare("--pass") == 0)
+		else if (opName.compare("-p") == 0 || opName.compare("--pass") == 0)
 		{
-			if(!pool_url_set)
+			if (!pool_url_set)
 			{
 				printer::inst()->print_msg(L0, "Pool address has to be set if you want to specify username and password.");
 				win_exit();
@@ -576,7 +581,7 @@ int main(int argc, char *argv[])
 			}
 
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-p/--pass' given");
 				win_exit();
@@ -585,9 +590,9 @@ int main(int argc, char *argv[])
 			params::inst().userSetPwd = true;
 			params::inst().poolPasswd = argv[i];
 		}
-		else if(opName.compare("-r") == 0 || opName.compare("--rigid") == 0)
+		else if (opName.compare("-r") == 0 || opName.compare("--rigid") == 0)
 		{
-			if(!pool_url_set)
+			if (!pool_url_set)
 			{
 				printer::inst()->print_msg(L0, "Pool address has to be set if you want to specify rigid.");
 				win_exit();
@@ -595,7 +600,7 @@ int main(int argc, char *argv[])
 			}
 
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-r/--rigid' given");
 				win_exit();
@@ -605,14 +610,14 @@ int main(int argc, char *argv[])
 			params::inst().userSetRigid = true;
 			params::inst().poolRigid = argv[i];
 		}
-		else if(opName.compare("--use-nicehash") == 0)
+		else if (opName.compare("--use-nicehash") == 0)
 		{
 			params::inst().nicehashMode = true;
 		}
-		else if(opName.compare("-c") == 0 || opName.compare("--config") == 0)
+		else if (opName.compare("-c") == 0 || opName.compare("--config") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-c/--config' given");
 				win_exit();
@@ -620,10 +625,10 @@ int main(int argc, char *argv[])
 			}
 			params::inst().configFile = argv[i];
 		}
-		else if(opName.compare("-C") == 0 || opName.compare("--poolconf") == 0)
+		else if (opName.compare("-C") == 0 || opName.compare("--poolconf") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-C/--poolconf' given");
 				win_exit();
@@ -631,20 +636,20 @@ int main(int argc, char *argv[])
 			}
 			params::inst().configFilePools = argv[i];
 		}
-		else if(opName.compare("-i") == 0 || opName.compare("--httpd") == 0)
+		else if (opName.compare("-i") == 0 || opName.compare("--httpd") == 0)
 		{
 			++i;
-			if( i >=argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '-i/--httpd' given");
 				win_exit();
 				return 1;
 			}
 
-			char* endp = nullptr;
+			char *endp = nullptr;
 			long int ret = strtol(argv[i], &endp, 10);
 
-			if(endp == nullptr || ret < 0 || ret > 65535)
+			if (endp == nullptr || ret < 0 || ret > 65535)
 			{
 				printer::inst()->print_msg(L0, "Argument for parameter '-i/--httpd' must be a number between 0 and 65535");
 				win_exit();
@@ -653,23 +658,23 @@ int main(int argc, char *argv[])
 
 			params::inst().httpd_port = ret;
 		}
-		else if(opName.compare("--noUAC") == 0)
+		else if (opName.compare("--noUAC") == 0)
 		{
 			params::inst().allowUAC = false;
 		}
-		else if(opName.compare("--benchmark") == 0)
+		else if (opName.compare("--benchmark") == 0)
 		{
 			++i;
-			if( i >= argc )
+			if (i >= argc)
 			{
 				printer::inst()->print_msg(L0, "No argument for parameter '--benchmark' given");
 				win_exit();
 				return 1;
 			}
-			char* block_version = nullptr;
+			char *block_version = nullptr;
 			long int bversion = strtol(argv[i], &block_version, 10);
 
-			if(bversion < 0 || bversion >= 256)
+			if (bversion < 0 || bversion >= 256)
 			{
 				printer::inst()->print_msg(L0, "Benchmark block version must be in the range [0,255]");
 				return 1;
@@ -716,20 +721,20 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-			printer::inst()->print_msg(L0, "Parameter unknown '%s'",argv[i]);
+			printer::inst()->print_msg(L0, "Parameter unknown '%s'", argv[i]);
 			win_exit();
 			return 1;
 		}
 	}
 
 	// check if we need a guided start
-	if(!configEditor::file_exist(params::inst().configFile))
+	if (!configEditor::file_exist(params::inst().configFile))
 		do_guided_config();
 
-	if(!configEditor::file_exist(params::inst().configFilePools))
+	if (!configEditor::file_exist(params::inst().configFilePools))
 		do_guided_pool_config();
 
-	if(!jconf::inst()->parse_config(params::inst().configFile.c_str(), params::inst().configFilePools.c_str()))
+	if (!jconf::inst()->parse_config(params::inst().configFile.c_str(), params::inst().configFilePools.c_str()))
 	{
 		win_exit();
 		return 1;
@@ -737,14 +742,14 @@ int main(int argc, char *argv[])
 
 #ifdef _WIN32
 	/* For Windows 7 and 8 request elevation at all times unless we are using slow memory */
-	if(jconf::inst()->GetSlowMemSetting() != jconf::slow_mem_cfg::always_use && !IsWindows10OrNewer())
+	if (jconf::inst()->GetSlowMemSetting() != jconf::slow_mem_cfg::always_use && !IsWindows10OrNewer())
 	{
 		printer::inst()->print_msg(L0, "Elevating due to Windows 7 or 8. You need Windows 10 to use fast memory without UAC elevation.");
 		RequestElevation();
 	}
 #endif
 
-	if(strlen(jconf::inst()->GetOutputFile()) != 0)
+	if (strlen(jconf::inst()->GetOutputFile()) != 0)
 		printer::inst()->open_logfile(jconf::inst()->GetOutputFile());
 
 	if (!BackendConnector::self_test())
@@ -753,7 +758,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	if(jconf::inst()->GetHttpdPort() != uint16_t(params::httpd_port_disabled))
+	if (jconf::inst()->GetHttpdPort() != uint16_t(params::httpd_port_disabled))
 	{
 #ifdef CONF_NO_HTTPD
 		printer::inst()->print_msg(L0, "HTTPD port is enabled but this binary was compiled without HTTP support!");
@@ -767,7 +772,7 @@ int main(int argc, char *argv[])
 		}
 #endif
 	}
-
+	set_colour(K_WHITE);
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
 	printer::inst()->print_str(get_version_str_short().c_str());
 	printer::inst()->print_str("\n\n");
@@ -789,7 +794,7 @@ int main(int argc, char *argv[])
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
 	printer::inst()->print_msg(L0, "Mining coin: %s", jconf::inst()->GetMiningCoin().c_str());
 
-	if(params::inst().benchmark_block_version >= 0)
+	if (params::inst().benchmark_block_version >= 0)
 	{
 		printer::inst()->print_str("!!!! Doing only a benchmark and exiting. To mine, remove the '--benchmark' option. !!!!\n");
 		return do_benchmark(params::inst().benchmark_block_version, params::inst().benchmark_wait_sec, params::inst().benchmark_work_sec);
@@ -799,11 +804,11 @@ int main(int argc, char *argv[])
 
 	uint64_t lastTime = get_timestamp_ms();
 	int key;
-	while(true)
+	while (true)
 	{
 		key = get_key();
 
-		switch(key)
+		switch (key)
 		{
 		case 'h':
 			executor::inst()->push_event(ex_event(EV_USR_HASHRATE));
@@ -821,23 +826,23 @@ int main(int argc, char *argv[])
 		uint64_t currentTime = get_timestamp_ms();
 
 		/* Hard guard to make sure we never get called more than twice per second */
-		if( currentTime - lastTime < 500)
+		if (currentTime - lastTime < 500)
 			std::this_thread::sleep_for(std::chrono::milliseconds(500 - (currentTime - lastTime)));
 		lastTime = currentTime;
 	}
-
+	reset_colour();
 	return 0;
 }
 
 int do_benchmark(int block_version, int wait_sec, int work_sec)
 {
 	using namespace std::chrono;
-	std::vector<xmrstak::iBackend*>* pvThreads;
+	std::vector<xmrstak::iBackend *> *pvThreads;
 
 	printer::inst()->print_msg(L0, "Prepare benchmark for block version %d", block_version);
 
 	uint8_t work[112];
-	memset(work,0,112);
+	memset(work, 0, 112);
 	work[0] = static_cast<uint8_t>(block_version);
 
 	xmrstak::pool_data dat;
@@ -868,7 +873,7 @@ int do_benchmark(int block_version, int wait_sec, int work_sec)
 		auto bType = static_cast<xmrstak::iBackend::BackendType>(pvThreads->at(i)->backendType);
 		std::string name(xmrstak::iBackend::getName(bType));
 
-		printer::inst()->print_msg(L0, "Benchmark Thread %u %s: %.1f H/S", i,name.c_str(), fHps);
+		printer::inst()->print_msg(L0, "Benchmark Thread %u %s: %.1f H/S", i, name.c_str(), fHps);
 		fTotalHps += fHps;
 	}
 
