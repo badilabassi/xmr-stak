@@ -386,7 +386,7 @@ void executor::on_pool_have_job(size_t pool_id, pool_job &oPoolJob)
 	if (iPoolDiff != pool->get_current_diff())
 	{
 		iPoolDiff = pool->get_current_diff();
-		set_colour(K_GREEN);
+		set_colour(K_WHITE);
 		printer::inst()->print_msg(L2, "Difficulty changed. Now: %llu.", int_port(iPoolDiff));
 		reset_colour();
 	}
@@ -398,13 +398,13 @@ void executor::on_pool_have_job(size_t pool_id, pool_job &oPoolJob)
 		{
 			if (prev_pool->is_dev_pool())
 			{
-				set_colour(K_BLUE);
+				set_colour(K_WHITE);
 				printer::inst()->print_msg(L2, "Switching back to user pool.");
 				reset_colour();
 			}
 			else
 			{
-				set_colour(K_BLUE);
+				set_colour(K_WHITE);
 				printer::inst()->print_msg(L2, "Pool switched.");
 				reset_colour();
 			}
@@ -418,7 +418,7 @@ void executor::on_pool_have_job(size_t pool_id, pool_job &oPoolJob)
 	}
 	else
 	{
-		set_colour(K_MAGENTA);
+		set_colour(K_GREEN);
 		printer::inst()->print_msg(L3, "New block detected.");
 		reset_colour();
 	}
@@ -875,7 +875,6 @@ void executor::hashrate_report(std::string &out)
 	out.append(hps_format(fHighestHps, num, sizeof(num)));
 	out.append(" H/s\n");
 	out.append("-----------------------------------------------------------------\n");
-	reset_colour();
 }
 
 char *time_format(char *buf, size_t len, std::chrono::system_clock::time_point time)
@@ -1026,7 +1025,7 @@ void executor::print_report(ex_event_name ev)
 		break;
 	}
 
-	set_colour(K_WHITE);
+	set_colour(K_BLUE);
 	printer::inst()->print_str(out.c_str());
 	reset_colour();
 }
