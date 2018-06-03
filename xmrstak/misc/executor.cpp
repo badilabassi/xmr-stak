@@ -807,10 +807,6 @@ void executor::hashrate_report(std::string &out)
 			auto bType = static_cast<xmrstak::iBackend::BackendType>(b);
 			std::string name(xmrstak::iBackend::getName(bType));
 			std::transform(name.begin(), name.end(), name.begin(), ::toupper);
-<<<<<<< HEAD
-
-=======
->>>>>>> Adding colors
 			out.append("HASHRATE REPORT - ").append(name).append("\n");
 			out.append("| ID |    10s |    60s |    15m |");
 			if (nthd != 1)
@@ -832,10 +828,6 @@ void executor::hashrate_report(std::string &out)
 				out.append(hps_format(fHps[0], num, sizeof(num))).append(" |");
 				out.append(hps_format(fHps[1], num, sizeof(num))).append(" |");
 				out.append(hps_format(fHps[2], num, sizeof(num))).append(1, ' ');
-<<<<<<< HEAD
-
-=======
->>>>>>> Adding colors
 				fTotal[0] += (std::isnormal(fHps[0])) ? fHps[0] : 0.0;
 				fTotal[1] += (std::isnormal(fHps[1])) ? fHps[1] : 0.0;
 				fTotal[2] += (std::isnormal(fHps[2])) ? fHps[2] : 0.0;
@@ -850,19 +842,11 @@ void executor::hashrate_report(std::string &out)
 
 			if ((i & 0x1) == 1) //We had odd number of threads
 				out.append("|\n");
-<<<<<<< HEAD
-
-=======
->>>>>>> Adding colors
 			out.append("Totals (").append(name).append("): ");
 			out.append(hps_format(fTotalCur[0], num, sizeof(num)));
 			out.append(hps_format(fTotalCur[1], num, sizeof(num)));
 			out.append(hps_format(fTotalCur[2], num, sizeof(num)));
 			out.append(" H/s\n");
-<<<<<<< HEAD
-
-=======
->>>>>>> Adding colors
 			out.append("-----------------------------------------------------------------\n");
 		}
 	}
